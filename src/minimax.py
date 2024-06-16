@@ -11,6 +11,7 @@ sys.setrecursionlimit(100000000)
 
 def minimax(game, depth=math.inf):
     stime = time.time()
+    print(f"running minimax with depth {depth}")
     ret = rec_minimax(game, depth)
     print(f"minimax took {time.time() - stime:.4f}s")
     return ret

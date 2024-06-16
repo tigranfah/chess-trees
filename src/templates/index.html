@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chess Web App</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <!-- <div id="board" style="width: 400px"></div> -->
+    <img id="board" src="/board_image" alt="Chess Board">
+    <input type="text" id="moveInput" placeholder="enter move">
+    <button onclick="performAction()">Make Move</button>
+    <button onclick="resetBoard()">Reset Board</button>
+    <script>
+        function performAction() {
+            var move = document.getElementById('moveInput').value;
+            fetch('/perform_action', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({move: move})
+            }).then(response => response.json()).then(data => {
+                if (data.status === 'ok') {
+                    updateBoard();
+                    performSearchAction();
+                } else {
+                    alert(data.message);
+                }
+            });
+        }
+
+        function performSearchAction() {
+            fetch('/perform_search_action', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            }).then(response => response.json()).then(data => {
+                if (data.status === 'ok') {
+                    console.log("searching for an action");
+                    updateBoard();
+                } else {
+                    alert(data.message);
+                }
+            });
+        }
+
+        function resetBoard() {
+            fetch('/reset', {
+                method: 'POST'
+            }).then(response => response.json()).then(data => {
+                if (data.status === 'ok') {
+                    updateBoard();
+                } else {
+                    alert(data.message);
+                }
+            });
+        }
+
+        function updateBoard() {
+            var boardImage = document.getElementById('board');
+            boardImage.src = '/board_image?' + new Date().getTime();
+        }
+    </script>
+</body>
+</html>
