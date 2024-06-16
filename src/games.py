@@ -22,10 +22,10 @@ PIECE_VALUES = {
 class ChessGame(Board, BaseGame):
 
     def actions(self):
-        return self.legal_moves
+        return map(lambda x: x.uci(), self.legal_moves)
     
     def perform_action(self, action):
-        self.push(action)
+        self.push_uci(action)
     
     def utility(self):
         score = 0

@@ -20,7 +20,8 @@ def index():
 def perform_action():
     move = request.json['move']
     try:
-        action = chess.Move.from_uci(move)
+        action = move
+        print(action)
         cgame.perform_action(action)
         response = {
             'status': 'ok',
@@ -38,7 +39,8 @@ def perform_action():
 @app.route('/perform_search_action', methods=['POST'])
 def perform_search_action():
     try:
-        v, action = minimax(cgame, depth=3)
+        v, action = minimax(cgame, depth=4)
+        print(f"search move {action}")
         cgame.perform_action(action)
         response = {
             'status': 'ok',
